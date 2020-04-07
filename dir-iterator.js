@@ -1,6 +1,8 @@
 //this module is used in path-finder.js
 const fs = require('fs');
 const crypto = require('crypto');
+const path = require('path');
+
  function crawlTextFiles(directoryPath,writeableFilePath){
     /* error handling */
     if(fs.statSync(writeableFilePath).isDirectory()){
@@ -32,14 +34,15 @@ function iteratorBFS(initialPath, writeStream){
 
     //using tree BFS to visit every directory and file.
     //writes content of any non directory file in writeStream.
+
     let queue = [initialPath];
     let topQueueIndex = 0; 
     //to use array as queue, without removing elements from queue, increment topQueueIndex
         while(queue.length !== topQueueIndex){
             let currentPath = queue[topQueueIndex++];
             let dirContents = fs.readdirSync(currentPath);
-            dirContents.forEach(childFileName => {
-                childPath = currentPath + '/' +childFileName;
+            dirContents.forEach(childFileName => {                
+                childPath = path.join(currentPath, childFileName);
                 if(!fs.statSync(childPath).isDirectory()){
                     //if childPath is has a file, write it in writeStream.
                           writeInStream(writeStream,childPath);
